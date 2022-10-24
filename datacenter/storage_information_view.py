@@ -6,7 +6,7 @@ from datacenter.models import get_duration, get_visitor_name
 
 def storage_information_view(request):
     non_closed_visits = []
-    visits = Visit.objects.all().filter(leaved_at=None)
+    visits = Visit.objects.all().filter(leaved_at__isnull=True)
     for visit in visits:
         visit_stats = {
             'who_entered': get_visitor_name(visit),
