@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import django
 from django.db import models
 from django.utils import timezone
@@ -33,10 +35,10 @@ class Visit(models.Model):
 
 
 def get_duration(visit):
-    current_time = django.utils.timezone.localtime(visit.leaved_at).replace(microsecond=0, second=0)
+    current_time = django.utils.timezone.localtime(visit.leaved_at).replace(microsecond=0)
     entered_time = visit.entered_at.replace(tzinfo=timezone.utc).astimezone(tz=None)
-    time_in_storage = str(current_time - entered_time)
-    return time_in_storage[:-3]
+    time_in_storage = current_time - entered_time
+    return time_in_storage
 
 
 def get_visitor_name(visitor):
@@ -44,8 +46,12 @@ def get_visitor_name(visitor):
 
 
 def is_visit_long(visit, minutes=60):
-    if visit.leaved_at:
-        entered_time = visit.entered_at.replace(tzinfo=timezone.utc).astimezone(tz=None)
-        leave_time = visit.leaved_at.replace(tzinfo=timezone.utc).astimezone(tz=None)
-        suspicious_time = (leave_time - entered_time).total_seconds() // 60
-        return suspicious_time > minutes
+    suspicious_time = get_duration(visit).total_seconds() // 60
+    return suspicious_time > minutes
+
+
+def format_duration(duration):
+    duration_to_str = str(duration)
+    duration_to_datetime = datetime.strptime(duration_to_str, '%H:%M:%S')
+    duration_back_to_str = datetime.strftime(duration_to_datetime, '%H:%M')
+    return duration_back_to_str
