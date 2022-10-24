@@ -1,6 +1,7 @@
-from datacenter.models import Passcard, get_duration, get_visitor_name
-from datacenter.models import Visit
 from django.shortcuts import render
+
+from datacenter.models import Visit
+from datacenter.models import get_duration, get_visitor_name
 
 
 def storage_information_view(request):
