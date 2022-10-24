@@ -54,6 +54,4 @@ def is_visit_long(visit, minutes=60):
         entered_time = visit.entered_at.replace(tzinfo=timezone.utc).astimezone(tz=None)
         leave_time = visit.leaved_at.replace(tzinfo=timezone.utc).astimezone(tz=None)
         suspicious_time = (leave_time - entered_time).total_seconds() // 60
-        if suspicious_time > minutes:
-            return True
-        return False
+        return suspicious_time > minutes
