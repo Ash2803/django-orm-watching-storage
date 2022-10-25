@@ -36,7 +36,7 @@ class Visit(models.Model):
 
 def get_duration(visit):
     current_time = django.utils.timezone.localtime(visit.leaved_at).replace(microsecond=0)
-    entered_time = visit.entered_at.replace(tzinfo=timezone.utc).astimezone(tz=None)
+    entered_time = django.utils.timezone.localtime(visit.entered_at).replace(microsecond=0)
     time_in_storage = current_time - entered_time
     return time_in_storage
 
